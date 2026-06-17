@@ -2,35 +2,37 @@ using UnityEngine;
 
 public class PaddleBehavior : MonoBehaviour
 {
-    public float Speed = 5.0f;
-    public KeyCode RightDirection = KeyCode.RightArrow;
-    public KeyCode LeftDirection = KeyCode.LeftArrow;
-    public float minX = -5.25f;
-    public float maxX = 5.25f;
-    
-    void Update()
-    { 
-        // Create a movement variable
-        Vector3 movement = Vector3.zero;
-        
-        // Update variable based on player's input 
-        if (Input.GetKey(RightDirection))
-        {
-            movement.x += Speed; 
-        }
-        
-        if (Input.GetKey(LeftDirection))
-        {
-            movement.x -= Speed;
-        }
-            
-        // consider frame rate to make game platform agnostic 
-        movement *= Time.deltaTime;
-        transform.position += movement;
+    public float _direction = 0.0f;
+    [SerializeField] private float _speed = 5.0f;
 
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float targetX = transform.position.x + (horizontalInput * Speed * Time.deltaTime);
-        float clampedX = Mathf.Clamp(targetX, minX, maxX);
-        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+    [SerializeField] private KeyCode _leftDirection = KeyCode.LeftArrow; 
+    [SerializeField] private KeyCode _rightDirection = KeyCode.RightArrow;
+
+    private Rigidbody2D _rb;
+
+    private void Start()
+    {
+        _rb = GetComponent<Rigidbody2D>();
     }
+
+    private void FixedUpdate()
+    {
+        _rb.linearVelocityX = _direction * _speed;
+    }
+
+    void Update()
+    {
+        _direction = 0.0f;
+
+        if (Input.GetKey(_rightDirection))
+        {
+            _direction += 1.0f;
+        }
+
+        if (Input.GetKey(_leftDirection))
+        {
+           _direction -= 1.0f;
+        }
+    }
+
 }
