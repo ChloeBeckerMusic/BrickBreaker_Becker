@@ -49,4 +49,13 @@ public class BallBehavior : MonoBehaviour
             }
         }
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("OutOfBounds"))
+        {
+            Debug.Log("Ball fell out!");
+            GameBehavior.Instance.ResetGame();
+        }
+    }
+
 }
