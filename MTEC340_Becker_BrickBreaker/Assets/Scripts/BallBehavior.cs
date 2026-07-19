@@ -7,10 +7,18 @@ public class BallBehavior : MonoBehaviour
     private Rigidbody2D _rb;
     [SerializeField, Range(0.0f, 1.0f)] private float _paddleInfluence = 0.4f;
 
+    private AudioSource _source;
+    [SerializeField] private AudioClip _wallHit;
+    [SerializeField] private AudioClip _paddleHit;
+    [SerializeField] private AudioClip _brickHit;
+
+    // ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
 
     void Start()
     {
        _rb = GetComponent<Rigidbody2D>();
+       _source = GetComponent<AudioSource>();
 
        Vector2 direction = Random.insideUnitCircle.normalized;
        
@@ -21,6 +29,17 @@ public class BallBehavior : MonoBehaviour
 
        _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
     }
+
+    // ---------------------------------------------------------------------------------------------
+
+    void Update()
+    {
+        _rb.simulated = GameBehavior.Instance.State == Utilities.GameState.Play;
+        // boolean and means if we're in play, keep simulated physics on,
+        // and if not, stop the physics 
+    }
+
+    // ---------------------------------------------------------------------------------------------
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -47,15 +66,43 @@ public class BallBehavior : MonoBehaviour
                 _rb.linearVelocity = _rb.linearVelocity.magnitude * direction.normalized * _speedIncrement; 
 
             }
+        
+            _source.clip = _paddleHit;
+
         }
+         
+        // -----
+
+        else if (other.gameObject.CompareTag("BrickBluePrefab") || other.gameObject.CompareTag("BrickOrangePrefab") || other.gameObject.CompareTag("BrickYellowPrefab"))
+        {
+            _source.clip = _brickHit;
+        }  
+
+        // -----
+
+        else
+        {   
+            _source.clip = _wallHit;
+            _source.Play();
+
+        }
+        _source.pitch = Random.Range(0.9f, 1.1f);
+        _source.Play();
     }
+
+    // ---------------------------------------------------------------------------------------------
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("OutOfBounds"))
         {
             Debug.Log("Ball fell out!");
-            GameBehavior.Instance.ResetGame();
+
+            StartCoroutine(GameBehavior.Instance.ResetAfterOutOfBounds());
+
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
 
 }

@@ -7,6 +7,9 @@ TagManager:
   - Ball
   - Paddle
   - OutOfBounds
+  - BrickBluePrefab
+  - BrickOrangePrefab
+  - BrickYellowPrefab
   layers:
   - Default
   - TransparentFX

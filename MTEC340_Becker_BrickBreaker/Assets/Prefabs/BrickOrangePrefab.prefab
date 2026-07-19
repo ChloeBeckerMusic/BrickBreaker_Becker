@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1571157624192830544}
   m_Layer: 0
   m_Name: BrickOrangePrefab
-  m_TagString: Untagged
+  m_TagString: BrickOrangePrefab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,3 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec443bd3eaa3443708f77629a89043f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BrickBehavior
+  _spriteRenderer: {fileID: 8018893330171058475}
+  _colors:
+  - {r: 0.44313726, g: 0.44313726, b: 0.44313726, a: 1}
+  - {r: 0.5283019, g: 0.40473828, b: 0.256675, a: 1}
+  - {r: 0.7924528, g: 0.51868576, b: 0.19063722, a: 1}
+  - {r: 1, g: 0.54509807, b: 0, a: 1}

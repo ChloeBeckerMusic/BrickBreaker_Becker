@@ -1,9 +1,32 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
 public class GameBehavior : MonoBehaviour
 {
     public static GameBehavior Instance;
+
+    private Utilities.GameState _state;
+
+    public Utilities.GameState State
+    {
+        get => _state;
+
+        set
+        {
+           _state = value;
+
+           _message.enabled = State == Utilities.GameState.Pause;
+        }
+
+    }
+
+    [SerializeField] private TMP_Text _message; 
+    private float _durationBetweenPoints = 0.3f;
+    
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _outOfBounds;
+    
     private GameObject _currentBall;
     [SerializeField] private GameObject _ballPrefab;
     [SerializeField] private TextMeshProUGUI _scoreTextUI;
@@ -18,7 +41,7 @@ public class GameBehavior : MonoBehaviour
         get { return _score; }
         set 
         { 
-            _score = value;
+            _score = value;      
             _scoreTextUI.text = "Score: " + _score.ToString();
         }
     }
@@ -31,14 +54,30 @@ public class GameBehavior : MonoBehaviour
 		
             DontDestroyOnLoad(gameObject);
         }
+        
+        else 
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Start()
     {
         ResetGame();
+
+        // Set initial state 
+        State = Utilities.GameState.Play;
     }
 
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            State = State == Utilities.GameState.Play ? 
+                Utilities.GameState.Pause : 
+                Utilities.GameState.Play;
+        }
+    }
     private void SpawnBall()
     {
         _currentBall= Instantiate(_ballPrefab);
@@ -55,8 +94,17 @@ public class GameBehavior : MonoBehaviour
         }
 
         Score = 0;
-        SpawnBall();
+        //apply a delay when a player scores to give it a respite 
+        Invoke(nameof(SpawnBall), _durationBetweenPoints);
         }
+
+    public IEnumerator ResetAfterOutOfBounds()
+    {
+        _audioSource.PlayOneShot(_outOfBounds, 0.35f);
+        yield return new WaitForSeconds(_outOfBounds.length);
+
+        ResetGame();
+    }
 }
 
 

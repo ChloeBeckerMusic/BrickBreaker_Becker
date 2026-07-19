@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8246642593799914001}
   m_Layer: 0
   m_Name: BrickBluePrefab
-  m_TagString: Untagged
+  m_TagString: BrickBluePrefab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,3 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec443bd3eaa3443708f77629a89043f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BrickBehavior
+  _colors:
+  - {r: 0.28235295, g: 0.28235295, b: 0.28235295, a: 1}
+  - {r: 0.24750803, g: 0.37970647, b: 0.509434, a: 1}
+  - {r: 0.19023673, g: 0.45114112, b: 0.7075472, a: 1}
+  - {r: 0.051886797, g: 0.53041553, b: 1, a: 1}
